@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.repositories
+package it.fabiomartignoni.exchangeratestracker.exchangeratesrepository
 
 interface ExchangeRatesRepository {
     fun getExchangeRates()

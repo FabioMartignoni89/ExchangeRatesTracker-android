@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.repositories
+package it.fabiomartignoni.exchangeratestracker.exchangeratesrepository
 
 class BaseExchangeRatesRepository: ExchangeRatesRepository {
     override fun getExchangeRates() {
