@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="it.fabiomartignoni.exchangeratestracker.SecondFragment"
+        android:name="it.fabiomartignoni.exchangeratestracker.NewExchangeRateFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_new_exchange_rate">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

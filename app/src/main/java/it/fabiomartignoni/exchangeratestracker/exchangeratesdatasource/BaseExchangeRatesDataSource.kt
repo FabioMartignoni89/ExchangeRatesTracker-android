@@ -1,0 +1,4 @@
+package it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource
+
+class BaseExchangeRatesDataSource: ExchangeRatesDataSource {
+}
