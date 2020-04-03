@@ -1,8 +1,11 @@
 package it.fabiomartignoni.exchangeratestracker
 
+import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource.ExchangeRatesRemoteDataSource
+import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrenciesDatabase
+import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrencyPair
 import it.fabiomartignoni.exchangeratestracker.other.loadJson
 
 import org.junit.Test
@@ -14,6 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.collections.HashMap
 
 /**
  * See [testing documentation](http://d.android.com/tools/testing).
@@ -63,5 +67,54 @@ class ExampleInstrumentedTest {
 
         Thread.sleep(1_000)
         assertTrue(resp)
+    }
+
+    @Test
+    fun canInitCurrenciesDB() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.databaseBuilder(
+            appContext,
+            CurrenciesDatabase::class.java, "currency-pairs-db-test"
+        ).build()
+        assertNotNull(db)
+    }
+
+    @Test
+    fun currenciesCRUD() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val db = Room.databaseBuilder(
+            appContext,
+            CurrenciesDatabase::class.java, "currency-pairs-db-test"
+        ).build()
+        val dao = db.currencyPairDao()
+        dao.deleteAll()
+        assertEquals(0, dao.getAll().size)
+        dao.insert(
+            CurrencyPair(
+                "USD",
+                "EUR"
+            )
+        )
+        dao.insert(
+            CurrencyPair(
+                "USD",
+                "CHF"
+            )
+        )
+        assertEquals(2, dao.getAll().size)
+        dao.insert(
+            CurrencyPair(
+                "USD",
+                "CHF"
+            )
+        )
+        assertEquals(3, dao.getAll().size)
+        assertNotNull(dao.find("USD", "EUR"))
+        assertNotNull(dao.find("USD", "CHF"))
+        dao.delete("USD", "CHF")
+        assertNull(dao.find("USD", "CHF"))
+        assertEquals(1, dao.getAll().size)
+        dao.delete("USD", "EUR")
+        assertEquals(0, dao.getAll().size)
     }
 }
