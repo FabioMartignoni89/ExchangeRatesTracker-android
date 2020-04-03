@@ -3,9 +3,9 @@ package it.fabiomartignoni.exchangeratestracker
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource.ExchangeRatesRemoteDataSource
-import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrenciesDatabase
-import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrencyPair
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource.ExchangeRatesRemoteDataSource
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrenciesDatabase
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrencyPair
 import it.fabiomartignoni.exchangeratestracker.other.loadJson
 
 import org.junit.Test

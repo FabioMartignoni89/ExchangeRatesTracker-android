@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratesrepository
+package it.fabiomartignoni.exchangeratestracker.model.repositories
 
 interface ExchangeRatesRepository {
     fun getExchangeRates(onResult: (List<ExchangeRate>) -> Unit)

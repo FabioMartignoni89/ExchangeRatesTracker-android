@@ -1,12 +1,11 @@
-package it.fabiomartignoni.exchangeratestracker.viewModels
+package it.fabiomartignoni.exchangeratestracker.viewmodel
 
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import it.fabiomartignoni.exchangeratestracker.ExchangeRateDisplayModel
-import it.fabiomartignoni.exchangeratestracker.exchangeratesrepository.ExchangeRate
-import it.fabiomartignoni.exchangeratestracker.exchangeratesrepository.ExchangeRatesRepository
+import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRate
+import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRatesRepository
 
 class ExchangeRatesViewModel(): ViewModel() {
     private lateinit var repository: ExchangeRatesRepository

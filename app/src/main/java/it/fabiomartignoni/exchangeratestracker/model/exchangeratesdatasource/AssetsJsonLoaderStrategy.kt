@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource
+package it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource
 
 import android.content.Context
 import it.fabiomartignoni.exchangeratestracker.other.loadJson

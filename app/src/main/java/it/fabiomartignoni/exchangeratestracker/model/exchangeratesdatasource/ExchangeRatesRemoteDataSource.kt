@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource
+package it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource
 
 import retrofit2.Call
 import retrofit2.http.GET

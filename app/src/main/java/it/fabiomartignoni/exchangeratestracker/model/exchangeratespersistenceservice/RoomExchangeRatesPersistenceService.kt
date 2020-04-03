@@ -1,7 +1,7 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice
+package it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice
 
-import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrencyPair
-import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrencyPairDao
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrencyPair
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrencyPairDao
 
 class RoomExchangeRatesPersistenceService(private val dao: CurrencyPairDao):
     ExchangeRatesPersistenceService {

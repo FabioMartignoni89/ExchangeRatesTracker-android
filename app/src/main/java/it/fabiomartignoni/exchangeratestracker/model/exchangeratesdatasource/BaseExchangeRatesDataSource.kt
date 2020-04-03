@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource
+package it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource
 
 import CurrenciesDTO
 import com.google.gson.Gson

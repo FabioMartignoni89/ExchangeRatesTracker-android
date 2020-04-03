@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource
+package it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource
 
 interface ExchangeRatesDataSource {
     fun getCurrencies(): List<String>

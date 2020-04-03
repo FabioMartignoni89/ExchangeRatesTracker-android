@@ -1,8 +1,8 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratesrepository
+package it.fabiomartignoni.exchangeratestracker.model.repositories
 
-import it.fabiomartignoni.exchangeratestracker.exchangeratesdatasource.ExchangeRatesDataSource
-import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.ExchangeRatesPersistenceService
-import it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room.CurrencyPair
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource.ExchangeRatesDataSource
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.ExchangeRatesPersistenceService
+import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrencyPair
 
 class BaseExchangeRatesRepository(
     private val dataSource: ExchangeRatesDataSource,

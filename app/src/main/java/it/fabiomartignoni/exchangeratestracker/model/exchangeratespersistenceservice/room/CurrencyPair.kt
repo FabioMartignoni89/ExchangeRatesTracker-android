@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.exchangeratespersistenceservice.room
+package it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker
+package it.fabiomartignoni.exchangeratestracker.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import it.fabiomartignoni.exchangeratestracker.R
 
 class ExchangeRatesFragment : Fragment() {
 
