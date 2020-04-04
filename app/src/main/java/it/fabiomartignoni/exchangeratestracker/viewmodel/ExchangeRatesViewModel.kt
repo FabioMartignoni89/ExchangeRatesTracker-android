@@ -2,7 +2,9 @@ package it.fabiomartignoni.exchangeratestracker.viewmodel
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRate
 import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRatesRepository
@@ -13,11 +15,15 @@ class ExchangeRatesViewModel(): ViewModel() {
     private lateinit var repository: ExchangeRatesRepository
     private val fetchDelayMillis: Long = 1000
 
-    var exchangeRates = MutableLiveData<List<ExchangeRateDisplayModel>>()
+    private var exchangeRatesModels = MutableLiveData<List<ExchangeRate>>()
+    lateinit var exchangeRates: LiveData<List<ExchangeRateDisplayModel>>
     var availableCurrencies = MutableLiveData<List<String>>()
 
     constructor(repository: ExchangeRatesRepository) : this() {
         this.repository = repository
+        exchangeRates = Transformations.map(exchangeRatesModels) { exchangeRatesModels ->
+            exchangeRatesModels.map { mapExchangeRateToDisplayModel(it) }
+        }
         fetchAvailableCurrencies()
         startFetchExchangeRates(repository)
     }
@@ -31,9 +37,14 @@ class ExchangeRatesViewModel(): ViewModel() {
         fetchAvailableCurrencies()
     }
 
-    fun untrackCurrencyPair(base: String, counter: String) {
+    fun untrackCurrencyPair(index: Int) {
         GlobalScope.launch {
-            repository.untrack(base, counter)
+            if (exchangeRatesModels.value != null &&
+                index < exchangeRatesModels.value!!.size) {
+                val exchangeRate = exchangeRatesModels.value!!.get(index)
+                repository.untrack(exchangeRate.baseCurrency,
+                    exchangeRate.counterCurrency)
+            }
         }
         fetchAvailableCurrencies()
     }
@@ -55,7 +66,7 @@ class ExchangeRatesViewModel(): ViewModel() {
                 if (exchangeRates.hasActiveObservers()) {
                     GlobalScope.launch {
                         repository.getExchangeRates { it ->
-                            exchangeRates.value = it.map { mapExchangeRate(it) }
+                            exchangeRatesModels.value = it
                         }
                     }
                 }
@@ -64,7 +75,7 @@ class ExchangeRatesViewModel(): ViewModel() {
         })
     }
 
-    private fun mapExchangeRate(it: ExchangeRate): ExchangeRateDisplayModel {
+    private fun mapExchangeRateToDisplayModel(it: ExchangeRate): ExchangeRateDisplayModel {
         val currencyPairFormatted = "${it.baseCurrency}/${it.counterCurrency}"
         var exchangeRateFormatted = "-"
         if (it.exchangeRate != null) {

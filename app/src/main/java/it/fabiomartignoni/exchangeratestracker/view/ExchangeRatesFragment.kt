@@ -1,14 +1,15 @@
 package it.fabiomartignoni.exchangeratestracker.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.fabiomartignoni.exchangeratestracker.R
 import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModel
 import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModelFactory
@@ -46,6 +47,14 @@ class ExchangeRatesFragment : Fragment(), NewExchangeRateFragment.NewExchangeRat
         exchangeRatesAdapter = ExchangeRatesAdapter()
         exchangeRatesRecyclerview.adapter = exchangeRatesAdapter
 
+        val swipeHandler = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel?.untrackCurrencyPair(viewHolder.adapterPosition)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(exchangeRatesRecyclerview)
+
         setupBindings()
 
         addExchangeRatesButton.setOnClickListener {
@@ -79,3 +88,4 @@ class ExchangeRatesFragment : Fragment(), NewExchangeRateFragment.NewExchangeRat
 
     //endregion
 }
+

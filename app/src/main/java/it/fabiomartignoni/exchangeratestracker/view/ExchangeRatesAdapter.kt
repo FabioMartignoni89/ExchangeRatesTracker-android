@@ -3,6 +3,7 @@ package it.fabiomartignoni.exchangeratestracker.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import it.fabiomartignoni.exchangeratestracker.R
 import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRateDisplayModel
@@ -51,9 +52,5 @@ class ExchangeRatesAdapter: RecyclerView.Adapter<ExchangeRatesAdapter.ExchangeRa
             view.currencyPairTextView.text = pairsText
             view.exchangeRateTextView.text = exchangeRate.exchangeRate
         }
-
     }
-
-
 }
-
