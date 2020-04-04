@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.viewmodel
+package it.fabiomartignoni.exchangeratestracker.viewmodel.exchangerates
 
 import android.os.Handler
 import android.os.Looper

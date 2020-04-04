@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.view
+package it.fabiomartignoni.exchangeratestracker.view.exchangerates
 
 import android.app.Dialog
 import android.os.Bundle
@@ -27,7 +27,8 @@ class NewExchangeRateFragment(): DialogFragment() {
     private var counterSpinner: Spinner? = null
 
     constructor(currencies: List<String>,
-                listener: NewExchangeRateListener) : this() {
+                listener: NewExchangeRateListener
+    ) : this() {
         this.currencies = currencies
         this.listener = listener
     }

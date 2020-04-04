@@ -7,7 +7,8 @@ import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceser
 class BaseExchangeRatesRepository(
     private val dataSource: ExchangeRatesDataSource,
     private val persistenceService: ExchangeRatesPersistenceService
-    ): ExchangeRatesRepository {
+    ):
+    ExchangeRatesRepository {
 
     companion object {
         val TAG = "BaseExchangeRatesRepository"

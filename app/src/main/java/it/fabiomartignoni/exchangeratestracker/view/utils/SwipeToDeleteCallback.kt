@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.view
+package it.fabiomartignoni.exchangeratestracker.view.utils
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

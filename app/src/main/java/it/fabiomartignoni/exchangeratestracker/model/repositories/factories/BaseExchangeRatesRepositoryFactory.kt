@@ -1,20 +1,18 @@
-package it.fabiomartignoni.exchangeratestracker.viewmodel
+package it.fabiomartignoni.exchangeratestracker.model.repositories.factories
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource.AssetsJsonLoaderStrategy
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource.BaseExchangeRatesDataSource
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.RoomExchangeRatesPersistenceService
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrenciesDatabase
 import it.fabiomartignoni.exchangeratestracker.model.repositories.BaseExchangeRatesRepository
+import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRatesRepository
 import it.fabiomartignoni.exchangeratestracker.other.Constants
 import it.fabiomartignoni.exchangeratestracker.other.Endpoints
 
-class ExchangeRatesViewModelFactory(private val context: Context) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+class BaseExchangeRatesRepositoryFactory(private val context: Context): ExchangeRatesRepositoryFactory {
+    override fun makeRepository(): ExchangeRatesRepository {
         val jsonLoader = AssetsJsonLoaderStrategy(context)
         val dataSource = BaseExchangeRatesDataSource(jsonLoader, Endpoints.fetchExchangeRates)
 
@@ -26,9 +24,6 @@ class ExchangeRatesViewModelFactory(private val context: Context) :
         val persistenceService = RoomExchangeRatesPersistenceService(currencyPairDao)
 
         val repository = BaseExchangeRatesRepository(dataSource, persistenceService)
-        return ExchangeRatesViewModel(
-            repository
-        ) as T
+        return repository
     }
-
 }

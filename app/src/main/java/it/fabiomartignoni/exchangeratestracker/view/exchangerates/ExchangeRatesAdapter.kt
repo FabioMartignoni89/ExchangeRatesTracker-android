@@ -1,11 +1,11 @@
-package it.fabiomartignoni.exchangeratestracker.view
+package it.fabiomartignoni.exchangeratestracker.view.exchangerates
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import it.fabiomartignoni.exchangeratestracker.R
-import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRateDisplayModel
+import it.fabiomartignoni.exchangeratestracker.viewmodel.exchangerates.ExchangeRateDisplayModel
 import kotlinx.android.synthetic.main.exchange_rate_row.view.*
 
 class ExchangeRatesAdapter(private val listener: ExchangeRatesAdapterListener): RecyclerView.Adapter<ExchangeRatesAdapter.ExchangeRateHolder>()  {
@@ -29,7 +29,9 @@ class ExchangeRatesAdapter(private val listener: ExchangeRatesAdapterListener): 
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.exchange_rate_row, parent, false)
-        return ExchangeRateHolder(view)
+        return ExchangeRateHolder(
+            view
+        )
     }
 
     override fun onBindViewHolder(holder: ExchangeRateHolder, position: Int) {
