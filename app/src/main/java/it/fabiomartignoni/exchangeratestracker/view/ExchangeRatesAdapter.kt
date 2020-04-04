@@ -47,7 +47,8 @@ class ExchangeRatesAdapter: RecyclerView.Adapter<ExchangeRatesAdapter.ExchangeRa
 
         fun bind(exchangeRate: ExchangeRateDisplayModel) {
             this.exchangeRate = exchangeRate
-            view.currencyPairTextView.text = exchangeRate.currencyPair
+            val pairsText = "${exchangeRate.currencyPair}   =   "
+            view.currencyPairTextView.text = pairsText
             view.exchangeRateTextView.text = exchangeRate.exchangeRate
         }
 
