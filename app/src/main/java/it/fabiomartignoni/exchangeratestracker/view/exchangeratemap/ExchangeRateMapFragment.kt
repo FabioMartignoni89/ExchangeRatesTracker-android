@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import it.fabiomartignoni.exchangeratestracker.R
 import it.fabiomartignoni.exchangeratestracker.viewmodel.exchangeratemap.ExchangeRateMapViewModel
 import it.fabiomartignoni.exchangeratestracker.viewmodel.exchangeratemap.ExchangeRateMapViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exchange_rate_map.*
+
 
 class ExchangeRateMapFragment: Fragment() {
 
@@ -50,6 +54,20 @@ class ExchangeRateMapFragment: Fragment() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowHomeEnabled(true)
+        }
+
+        val mapFragment = SupportMapFragment.newInstance()
+        val fragmentTransaction =
+            childFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.mapView, mapFragment)
+        fragmentTransaction.commitAllowingStateLoss()
+        mapFragment.getMapAsync { map ->
+            val sydney = LatLng(-33.852, 151.211)
+            map.addMarker(
+                MarkerOptions().position(sydney)
+                    .title("Marker in Sydney")
+            )
+            map.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
 
         setupBindings()
