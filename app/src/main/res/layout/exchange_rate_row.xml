@@ -10,14 +10,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/currencyPairTextView"
-        style="@style/SecondaryText"
-        android:text="USD/EUR"/>
+        style="@style/SecondaryText"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/exchangeRateTextView"
-        style="@style/PrimaryText"
-        android:text="1.724"/>
+        style="@style/PrimaryText"/>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/next"/>
 </LinearLayout>
