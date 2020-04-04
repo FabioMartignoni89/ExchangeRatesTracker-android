@@ -2,57 +2,72 @@ package it.fabiomartignoni.exchangeratestracker.view
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import it.fabiomartignoni.exchangeratestracker.R
-import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModel
-import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModelFactory
+import kotlinx.android.synthetic.main.fragment_new_exchange_rate.*
+import kotlinx.android.synthetic.main.fragment_new_exchange_rate.view.*
 
-class NewExchangeRateFragment : DialogFragment() {
+
+class NewExchangeRateFragment(): DialogFragment() {
 
     companion object {
-        val TAG = "new_exchange_rate_fragment"
+        val TAG = "NewExchangeRateFragment"
     }
 
-    var viewModel: ExchangeRatesViewModel? = null
+    interface NewExchangeRateListener {
+        fun onCurrencyPairSelected(base: String, counter: String)
+    }
+
+    private lateinit var currencies: List<String>
+    private lateinit var listener: NewExchangeRateListener
+
+    private var baseSpinner: Spinner? = null
+    private var counterSpinner: Spinner? = null
+
+    constructor(currencies: List<String>,
+                listener: NewExchangeRateListener) : this() {
+        this.currencies = currencies
+        this.listener = listener
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        viewModel = ViewModelProvider(this, ExchangeRatesViewModelFactory(activity!!.baseContext))
-            .get(ExchangeRatesViewModel::class.java)
+        val view = requireActivity().layoutInflater.inflate(R.layout.fragment_new_exchange_rate, null)
 
-        if (activity == null) {
-            print("Error presenting add new exchange rate dialog.")
-            return super.onCreateDialog(savedInstanceState)
-        }
-
-        val inflater = activity!!.layoutInflater
-        val view = inflater.inflate(R.layout.fragment_new_exchange_rate, null)
-
-        val alertBuilder = androidx.appcompat.app.AlertDialog.Builder(activity!!)
-        alertBuilder.setView(view)
-        alertBuilder.setTitle(R.string.select_currencies)
-        alertBuilder.setPositiveButton(R.string.confirm_button) { dialog, which ->
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(view)
+        builder.setTitle(R.string.select_currencies)
+        builder.setPositiveButton(R.string.confirm_button) { dialog, which ->
+            trackSelectedPairs()
             dismiss()
         }
 
-        val alert = alertBuilder.create()
+        val alert = builder.create()
         alert.show()
+
+        baseSpinner = view.baseCurrencySpinner
+        counterSpinner = view.counterCurrencySpinner
+        baseSpinner?.adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, currencies)
+        counterSpinner?.adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, currencies)
 
         return alert
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun trackSelectedPairs() {
+        val baseIndex = baseSpinner?.selectedItemPosition
+        val counterIndex = counterSpinner?.selectedItemPosition
 
-        setupBindings()
-    }
-
-    private fun setupBindings() {
-        viewModel?.availableCurrencies?.observe(viewLifecycleOwner, Observer { currency ->
-            // exchangeRatesRecyclerview
-        })
+        if (baseIndex != null && counterIndex != null &&
+            baseIndex < currencies.size && counterIndex < currencies.size) {
+            val base = currencies[baseIndex]
+            val counter = currencies[counterIndex]
+            listener.onCurrencyPairSelected(base, counter)
+        }
+        else {
+            println("$TAG - Invalid selected currency pairs indexes")
+        }
     }
 }

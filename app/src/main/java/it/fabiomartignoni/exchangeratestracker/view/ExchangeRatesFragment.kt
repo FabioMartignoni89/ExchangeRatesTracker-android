@@ -13,10 +13,10 @@ import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModel
 import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModelFactory
 import kotlinx.android.synthetic.main.fragment_exchange_rates.*
 
-class ExchangeRatesFragment : Fragment() {
+class ExchangeRatesFragment : Fragment(), NewExchangeRateFragment.NewExchangeRateListener {
 
     companion object {
-        val TAG = "exchange_rates_fragment"
+        val TAG = "ExchangeRatesFragment"
     }
 
     var viewModel: ExchangeRatesViewModel? = null
@@ -54,10 +54,20 @@ class ExchangeRatesFragment : Fragment() {
 
     //region Utils
 
-    private fun openNewExchangeRateDialog() {
-        val addExchangeRateFragment = NewExchangeRateFragment()
+    private fun openNewExchangeRateDialog() = if (viewModel != null) {
+        val addExchangeRateFragment = NewExchangeRateFragment(
+            viewModel?.availableCurrencies?.value ?: ArrayList(),
+            this
+        )
         addExchangeRateFragment.isCancelable = true
         addExchangeRateFragment.show(parentFragmentManager, NewExchangeRateFragment.TAG)
+    }
+    else {
+        print("$TAG - viewmodel is required in order to present new exchange rate dialog")
+    }
+
+    override fun onCurrencyPairSelected(base: String, counter: String) {
+        viewModel?.trackCurrencyPair(base, counter)
     }
 
     //endregion

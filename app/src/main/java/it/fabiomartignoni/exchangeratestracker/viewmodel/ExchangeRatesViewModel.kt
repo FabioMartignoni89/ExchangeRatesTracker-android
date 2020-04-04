@@ -18,18 +18,23 @@ class ExchangeRatesViewModel(): ViewModel() {
 
     constructor(repository: ExchangeRatesRepository) : this() {
         this.repository = repository
+        fetchAvailableCurrencies()
         startFetchExchangeRates(repository)
     }
 
     //region UI actions
 
     fun trackCurrencyPair(base: String, counter: String) {
-        repository.track(base, counter)
+        GlobalScope.launch {
+            repository.track(base, counter)
+        }
         fetchAvailableCurrencies()
     }
 
     fun untrackCurrencyPair(base: String, counter: String) {
-        repository.untrack(base, counter)
+        GlobalScope.launch {
+            repository.untrack(base, counter)
+        }
         fetchAvailableCurrencies()
     }
 
@@ -38,7 +43,9 @@ class ExchangeRatesViewModel(): ViewModel() {
     //region private
 
     private fun fetchAvailableCurrencies() {
-        availableCurrencies.value = repository.getCurrencies()
+        GlobalScope.launch {
+            availableCurrencies.postValue(repository.getCurrencies())
+        }
     }
 
     private fun startFetchExchangeRates(repository: ExchangeRatesRepository) {

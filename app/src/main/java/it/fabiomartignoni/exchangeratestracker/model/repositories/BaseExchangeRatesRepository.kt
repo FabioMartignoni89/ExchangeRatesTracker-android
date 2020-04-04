@@ -9,29 +9,40 @@ class BaseExchangeRatesRepository(
     private val persistenceService: ExchangeRatesPersistenceService
     ): ExchangeRatesRepository {
 
+    companion object {
+        val TAG = "BaseExchangeRatesRepository"
+    }
+
     override suspend fun getExchangeRates(onResult: (List<ExchangeRate>) -> Unit) {
         val trackedPairs = persistenceService.loadPairs()
-        dataSource.fetchExchangeRates(trackedPairs.map { "${it.base}${it.counter}" }) {
+        val apiFormattedPairs = trackedPairs.map { "${it.base}${it.counter}" }
+        dataSource.fetchExchangeRates(apiFormattedPairs) { rates ->
+
             val exchangeRates = trackedPairs.map { ExchangeRate(it.base, it.counter, null) }
-            if (it != null) {
+
+            if (rates != null) {
                 for ((index, exchangeRate) in exchangeRates.withIndex()) {
-                    exchangeRate.exchangeRate = it[index]
+                    exchangeRate.exchangeRate = rates[index]
                 }
+
+                println("$TAG - New exchange rates values retrieved")
             }
 
             onResult(exchangeRates)
         }
     }
 
-    override fun getCurrencies(): List<String> {
+    override suspend fun getCurrencies(): List<String> {
         return dataSource.getCurrencies()
     }
 
-    override fun track(base: String, counter: String) {
+    override suspend fun track(base: String, counter: String) {
+        println("$TAG - $base/$counter tracked")
         return persistenceService.savePair(CurrencyPair(base, counter))
     }
 
-    override fun untrack(base: String, counter: String) {
+    override suspend fun untrack(base: String, counter: String) {
+        println("$TAG - $base/$counter untracked")
         persistenceService.removePair(CurrencyPair(base, counter))
     }
 }

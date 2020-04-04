@@ -10,12 +10,13 @@ import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceser
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrenciesDatabase
 import it.fabiomartignoni.exchangeratestracker.model.repositories.BaseExchangeRatesRepository
 import it.fabiomartignoni.exchangeratestracker.other.Constants
+import it.fabiomartignoni.exchangeratestracker.other.Endpoints
 
 class ExchangeRatesViewModelFactory(private val context: Context) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val jsonLoader = AssetsJsonLoaderStrategy(context)
-        val dataSource = BaseExchangeRatesDataSource(jsonLoader)
+        val dataSource = BaseExchangeRatesDataSource(jsonLoader, Endpoints.fetchExchangeRates)
 
         val db = Room.databaseBuilder(
             context,
