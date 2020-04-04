@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRate
 import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRatesRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ExchangeRatesViewModel(): ViewModel() {
     private lateinit var repository: ExchangeRatesRepository
@@ -44,8 +46,10 @@ class ExchangeRatesViewModel(): ViewModel() {
         mainHandler.post(object : Runnable {
             override fun run() {
                 if (exchangeRates.hasActiveObservers()) {
-                    repository.getExchangeRates { it ->
-                        exchangeRates.value = it.map { mapExchangeRate(it) }
+                    GlobalScope.launch {
+                        repository.getExchangeRates { it ->
+                            exchangeRates.value = it.map { mapExchangeRate(it) }
+                        }
                     }
                 }
                 mainHandler.postDelayed(this, fetchDelayMillis)

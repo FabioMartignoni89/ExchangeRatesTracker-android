@@ -9,15 +9,13 @@ class BaseExchangeRatesRepository(
     private val persistenceService: ExchangeRatesPersistenceService
     ): ExchangeRatesRepository {
 
-    override fun getExchangeRates(onResult: (List<ExchangeRate>) -> Unit) {
+    override suspend fun getExchangeRates(onResult: (List<ExchangeRate>) -> Unit) {
         val trackedPairs = persistenceService.loadPairs()
         dataSource.fetchExchangeRates(trackedPairs.map { "${it.base}${it.counter}" }) {
             val exchangeRates = trackedPairs.map { ExchangeRate(it.base, it.counter, null) }
             if (it != null) {
-                var index = 0
-                for (exchangeRate in exchangeRates) {
+                for ((index, exchangeRate) in exchangeRates.withIndex()) {
                     exchangeRate.exchangeRate = it[index]
-                    index++
                 }
             }
 
