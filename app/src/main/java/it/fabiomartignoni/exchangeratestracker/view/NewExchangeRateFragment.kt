@@ -7,7 +7,6 @@ import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import it.fabiomartignoni.exchangeratestracker.R
-import kotlinx.android.synthetic.main.fragment_new_exchange_rate.*
 import kotlinx.android.synthetic.main.fragment_new_exchange_rate.view.*
 
 

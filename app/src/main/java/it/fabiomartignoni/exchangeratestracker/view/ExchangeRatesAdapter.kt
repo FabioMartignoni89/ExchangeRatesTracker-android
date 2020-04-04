@@ -3,13 +3,16 @@ package it.fabiomartignoni.exchangeratestracker.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import it.fabiomartignoni.exchangeratestracker.R
 import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRateDisplayModel
 import kotlinx.android.synthetic.main.exchange_rate_row.view.*
 
-class ExchangeRatesAdapter: RecyclerView.Adapter<ExchangeRatesAdapter.ExchangeRateHolder>()  {
+class ExchangeRatesAdapter(private val listener: ExchangeRatesAdapterListener): RecyclerView.Adapter<ExchangeRatesAdapter.ExchangeRateHolder>()  {
+
+    interface ExchangeRatesAdapterListener {
+        fun onRowSelected(index: Int)
+    }
 
     private var exchangeRates: List<ExchangeRateDisplayModel> = ArrayList()
 
@@ -31,20 +34,14 @@ class ExchangeRatesAdapter: RecyclerView.Adapter<ExchangeRatesAdapter.ExchangeRa
 
     override fun onBindViewHolder(holder: ExchangeRateHolder, position: Int) {
         holder.bind(exchangeRates[position])
+        holder.itemView.setOnClickListener() {
+            listener.onRowSelected(position)
+        }
     }
 
-    class ExchangeRateHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
-
+    class ExchangeRateHolder(v: View) : RecyclerView.ViewHolder(v) {
         private var view: View = v
         private var exchangeRate: ExchangeRateDisplayModel? = null
-
-        init {
-            v.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View) {
-
-        }
 
         fun bind(exchangeRate: ExchangeRateDisplayModel) {
             this.exchangeRate = exchangeRate

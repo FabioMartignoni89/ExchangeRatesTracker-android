@@ -15,7 +15,9 @@ import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModel
 import it.fabiomartignoni.exchangeratestracker.viewmodel.ExchangeRatesViewModelFactory
 import kotlinx.android.synthetic.main.fragment_exchange_rates.*
 
-class ExchangeRatesFragment : Fragment(), NewExchangeRateFragment.NewExchangeRateListener {
+class ExchangeRatesFragment : Fragment(),
+    NewExchangeRateFragment.NewExchangeRateListener,
+    ExchangeRatesAdapter.ExchangeRatesAdapterListener {
 
     companion object {
         val TAG = "ExchangeRatesFragment"
@@ -44,7 +46,7 @@ class ExchangeRatesFragment : Fragment(), NewExchangeRateFragment.NewExchangeRat
 
         linearLayoutManager = LinearLayoutManager(context)
         exchangeRatesRecyclerview.layoutManager = linearLayoutManager
-        exchangeRatesAdapter = ExchangeRatesAdapter()
+        exchangeRatesAdapter = ExchangeRatesAdapter(this)
         exchangeRatesRecyclerview.adapter = exchangeRatesAdapter
 
         val swipeHandler = object : SwipeToDeleteCallback() {
@@ -84,6 +86,11 @@ class ExchangeRatesFragment : Fragment(), NewExchangeRateFragment.NewExchangeRat
 
     override fun onCurrencyPairSelected(base: String, counter: String) {
         viewModel?.trackCurrencyPair(base, counter)
+    }
+
+    override fun onRowSelected(index: Int) {
+        val i = 0
+        //viewModel?.onExchangeRateSelected(index)
     }
 
     //endregion

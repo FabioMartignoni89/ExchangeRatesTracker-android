@@ -49,6 +49,13 @@ class ExchangeRatesViewModel(): ViewModel() {
         fetchAvailableCurrencies()
     }
 
+    /*fun onExchangeRateSelected(index: Int) {
+        GlobalScope.launch {
+            val
+            repository.getCurrencyRefCity()
+        }
+    }*/
+
     //endregion
 
     //region private
