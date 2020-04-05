@@ -46,8 +46,10 @@ class BaseExchangeRatesRepository(
     }
 
     override suspend fun track(base: String, counter: String) {
-        println("$TAG - $base/$counter tracked")
-        return persistenceService.savePair(CurrencyPair(base, counter))
+        if (base != counter && base != "" && counter != "") {
+            println("$TAG - $base/$counter tracked")
+            persistenceService.savePair(CurrencyPair(base, counter))
+        }
     }
 
     override suspend fun untrack(base: String, counter: String) {
