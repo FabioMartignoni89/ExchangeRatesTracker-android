@@ -14,7 +14,9 @@ import it.fabiomartignoni.exchangeratestracker.other.Endpoints
 class BaseExchangeRatesRepositoryFactory(private val context: Context): ExchangeRatesRepositoryFactory {
     override fun makeRepository(): ExchangeRatesRepository {
         val jsonLoader = AssetsJsonLoaderStrategy(context)
-        val dataSource = BaseExchangeRatesDataSource(jsonLoader, Endpoints.fetchExchangeRates)
+        val dataSource = BaseExchangeRatesDataSource(jsonLoader,
+            Constants.currenciesJsonFileName,
+            Endpoints.fetchExchangeRates)
 
         val db = Room.databaseBuilder(
             context,

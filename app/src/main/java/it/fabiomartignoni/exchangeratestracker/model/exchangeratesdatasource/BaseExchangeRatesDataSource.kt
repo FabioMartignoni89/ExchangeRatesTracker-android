@@ -4,6 +4,7 @@ import CityDTO
 import CurrenciesDTO
 import com.google.gson.Gson
 import it.fabiomartignoni.exchangeratestracker.model.entities.RefCity
+import it.fabiomartignoni.exchangeratestracker.other.Constants
 import it.fabiomartignoni.exchangeratestracker.other.Endpoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -13,22 +14,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.StringBuilder
 
 class BaseExchangeRatesDataSource(private val jsonLoader: JsonLoaderStrategy,
+                                  private val currenciesJsonName: String,
                                   private val fetchExchangeRatesEndpoint: Endpoint): ExchangeRatesDataSource {
 
     companion object {
         val TAG = "BaseExchangeRatesDataSource"
     }
 
-    private val currenciesJsonFileName = "currencies.json"
-
     override fun getCurrencies(): List<String> {
-        val currenciesJson = jsonLoader.loadJson(currenciesJsonFileName)
+        val currenciesJson = jsonLoader.loadJson(currenciesJsonName)
         val dto = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
         return dto.worldCurrencies.map { it.currency }
     }
 
     override fun getRefCity(currency: String): RefCity {
-        val currenciesJson = jsonLoader.loadJson(currenciesJsonFileName)
+        val currenciesJson = jsonLoader.loadJson(currenciesJsonName)
         val dto = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
         val cityDTO = dto
             .worldCurrencies
