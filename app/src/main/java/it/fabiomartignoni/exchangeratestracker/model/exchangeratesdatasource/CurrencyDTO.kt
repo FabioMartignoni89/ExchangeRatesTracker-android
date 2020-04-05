@@ -6,10 +6,10 @@ data class CurrenciesDTO (
 
 data class WorldCurrencies (
 	@SerializedName("currency") val currency : String,
-	@SerializedName("city") val city : City
+	@SerializedName("city") val city : CityDTO
 )
 
-data class City (
+data class CityDTO (
 	@SerializedName("name") val name : String,
 	@SerializedName("lat") val lat : Double,
 	@SerializedName("lon") val lon : Double

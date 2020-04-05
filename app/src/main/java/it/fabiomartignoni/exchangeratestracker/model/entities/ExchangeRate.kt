@@ -1,4 +1,4 @@
-package it.fabiomartignoni.exchangeratestracker.model.repositories
+package it.fabiomartignoni.exchangeratestracker.model.entities
 
 data class ExchangeRate(val baseCurrency: String,
                         val counterCurrency: String,

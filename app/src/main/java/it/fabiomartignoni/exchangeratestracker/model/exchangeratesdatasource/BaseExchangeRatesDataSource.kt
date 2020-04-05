@@ -1,9 +1,10 @@
 package it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource
 
+import CityDTO
 import CurrenciesDTO
 import com.google.gson.Gson
+import it.fabiomartignoni.exchangeratestracker.model.entities.RefCity
 import it.fabiomartignoni.exchangeratestracker.other.Endpoint
-import it.fabiomartignoni.exchangeratestracker.other.Endpoints
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,8 +23,18 @@ class BaseExchangeRatesDataSource(private val jsonLoader: JsonLoaderStrategy,
 
     override fun getCurrencies(): List<String> {
         val currenciesJson = jsonLoader.loadJson(currenciesJsonFileName)
-        val currenciesDTO = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
-        return currenciesDTO.worldCurrencies.map { it.currency }
+        val dto = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
+        return dto.worldCurrencies.map { it.currency }
+    }
+
+    override fun getRefCity(currency: String): RefCity {
+        val currenciesJson = jsonLoader.loadJson(currenciesJsonFileName)
+        val dto = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
+        val cityDTO = dto
+            .worldCurrencies
+            .first { it.currency == currency }
+            .city
+        return RefCity(cityDTO.name, cityDTO.lat, cityDTO.lon)
     }
 
     override fun fetchExchangeRates(currencyPairs: List<String>, onResult: (List<Double>?) -> Unit) {

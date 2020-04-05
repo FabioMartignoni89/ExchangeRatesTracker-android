@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.fabiomartignoni.exchangeratestracker.R
 import it.fabiomartignoni.exchangeratestracker.view.utils.SwipeToDeleteCallback
-import it.fabiomartignoni.exchangeratestracker.view.exchangeratemap.ExchangeRateMapFragment
 import it.fabiomartignoni.exchangeratestracker.viewmodel.exchangerates.ExchangeRatesViewModel
 import it.fabiomartignoni.exchangeratestracker.viewmodel.exchangerates.ExchangeRatesViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -85,6 +84,10 @@ class ExchangeRatesFragment: Fragment(),
         viewModel?.exchangeRates?.observe(viewLifecycleOwner, Observer { exchangeRates ->
             exchangeRatesAdapter.updateExchangeRates(exchangeRates)
         })
+
+        viewModel?.onNavigationEvent?.observe(viewLifecycleOwner, Observer { navigationAction ->
+            findNavController().navigate(navigationAction)
+        })
     }
 
     //region
@@ -94,7 +97,7 @@ class ExchangeRatesFragment: Fragment(),
     }
 
     override fun onRowSelected(index: Int) {
-        openExchangeRateDetail()
+        viewModel?.onExchangeRateSelected(index)
     }
 
     //endregion
@@ -116,10 +119,6 @@ class ExchangeRatesFragment: Fragment(),
     }
     else {
         print("$TAG - viewmodel is required in order to present new exchange rate dialog")
-    }
-
-    private fun openExchangeRateDetail() {
-        findNavController().navigate(R.id.action_ExchangeRatesFragment_to_exchangeRateMapFragment)
     }
 
     //endregion

@@ -1,5 +1,7 @@
 package it.fabiomartignoni.exchangeratestracker.model.repositories
 
+import it.fabiomartignoni.exchangeratestracker.model.entities.RefCity
+import it.fabiomartignoni.exchangeratestracker.model.entities.ExchangeRate
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource.ExchangeRatesDataSource
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.ExchangeRatesPersistenceService
 import it.fabiomartignoni.exchangeratestracker.model.exchangeratespersistenceservice.room.CurrencyPair
@@ -19,7 +21,13 @@ class BaseExchangeRatesRepository(
         val apiFormattedPairs = trackedPairs.map { "${it.base}${it.counter}" }
         dataSource.fetchExchangeRates(apiFormattedPairs) { rates ->
 
-            val exchangeRates = trackedPairs.map { ExchangeRate(it.base, it.counter, null) }
+            val exchangeRates = trackedPairs.map {
+                ExchangeRate(
+                    it.base,
+                    it.counter,
+                    null
+                )
+            }
 
             if (rates != null) {
                 for ((index, exchangeRate) in exchangeRates.withIndex()) {
@@ -45,5 +53,9 @@ class BaseExchangeRatesRepository(
     override suspend fun untrack(base: String, counter: String) {
         println("$TAG - $base/$counter untracked")
         persistenceService.removePair(CurrencyPair(base, counter))
+    }
+
+    override suspend fun getRefCity(currency: String): RefCity {
+        return dataSource.getRefCity(currency)
     }
 }

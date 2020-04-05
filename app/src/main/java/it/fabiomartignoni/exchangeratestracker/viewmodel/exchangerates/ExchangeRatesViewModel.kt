@@ -6,10 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRate
+import androidx.navigation.NavDirections
+import it.fabiomartignoni.exchangeratestracker.model.entities.ExchangeRate
 import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRatesRepository
+import it.fabiomartignoni.exchangeratestracker.view.exchangerates.ExchangeRatesFragmentDirections
+import it.fabiomartignoni.exchangeratestracker.view.utils.SingleLiveEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 class ExchangeRatesViewModel(): ViewModel() {
     private lateinit var repository: ExchangeRatesRepository
@@ -18,6 +22,7 @@ class ExchangeRatesViewModel(): ViewModel() {
     private var exchangeRatesModels = MutableLiveData<List<ExchangeRate>>()
     lateinit var exchangeRates: LiveData<List<ExchangeRateDisplayModel>>
     var availableCurrencies = MutableLiveData<List<String>>()
+    val onNavigationEvent = SingleLiveEvent<NavDirections>()
 
     constructor(repository: ExchangeRatesRepository) : this() {
         this.repository = repository
@@ -49,12 +54,16 @@ class ExchangeRatesViewModel(): ViewModel() {
         fetchAvailableCurrencies()
     }
 
-    /*fun onExchangeRateSelected(index: Int) {
-        GlobalScope.launch {
-            val
-            repository.getCurrencyRefCity()
+    fun onExchangeRateSelected(index: Int) {
+        val selected = exchangeRatesModels.value?.get(index)
+        if (selected != null) {
+            val action = ExchangeRatesFragmentDirections
+                .actionExchangeRatesFragmentToExchangeRateMapFragment()
+            action.baseCurrency = selected.baseCurrency
+            action.counterCurrency = selected.counterCurrency
+            onNavigationEvent.value = action
         }
-    }*/
+    }
 
     //endregion
 
