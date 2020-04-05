@@ -1,12 +1,11 @@
 <resources>
-    <string name="app_name">ExchangeRatesTracker</string>
+    <string name="app_name">ERT</string>
 
     <!-- TODO remove the api key from the public repo asap -->
     <string name="google_maps_key">AIzaSyB-zt0cE0wfZ-FoDF37A6ZO70_p-U8XjUI</string>
 
     <string name="exchange_rates_fragment_label">Exchange rates fragment</string>
     <string name="exchange_rate_map_fragment_label">Exchange rate map fragment</string>
-
 
     <string name="exchange_rates">Exchange rates</string>
     <string name="add_button">Add</string>
