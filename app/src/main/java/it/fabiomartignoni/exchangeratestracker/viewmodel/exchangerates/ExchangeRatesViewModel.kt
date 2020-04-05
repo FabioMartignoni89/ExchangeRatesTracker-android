@@ -1,7 +1,5 @@
 package it.fabiomartignoni.exchangeratestracker.viewmodel.exchangerates
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -17,20 +15,19 @@ import kotlinx.coroutines.launch
 
 class ExchangeRatesViewModel(): ViewModel() {
     private lateinit var repository: ExchangeRatesRepository
-    private val fetchDelayMillis: Long = 1000
 
-    private var exchangeRatesModels = MutableLiveData<List<ExchangeRate>>()
     lateinit var exchangeRates: LiveData<List<ExchangeRateDisplayModel>>
     var availableCurrencies = MutableLiveData<List<String>>()
     val onNavigationEvent = SingleLiveEvent<NavDirections>()
 
     constructor(repository: ExchangeRatesRepository) : this() {
         this.repository = repository
-        exchangeRates = Transformations.map(exchangeRatesModels) { exchangeRatesModels ->
+
+        exchangeRates = Transformations.map(repository.getExchangeRates()) { exchangeRatesModels ->
             exchangeRatesModels.map { mapExchangeRateToDisplayModel(it) }
         }
+
         fetchAvailableCurrencies()
-        startFetchExchangeRates(repository)
     }
 
     //region UI actions
@@ -43,19 +40,22 @@ class ExchangeRatesViewModel(): ViewModel() {
     }
 
     fun untrackCurrencyPair(index: Int) {
-        GlobalScope.launch {
-            if (exchangeRatesModels.value != null &&
-                index < exchangeRatesModels.value!!.size) {
-                val exchangeRate = exchangeRatesModels.value!!.get(index)
-                repository.untrack(exchangeRate.baseCurrency,
-                    exchangeRate.counterCurrency)
+        val exchangeRatesModels = repository.getExchangeRates().value
+        if (exchangeRatesModels != null &&
+            index < exchangeRatesModels.size) {
+            val exchangeRate = exchangeRatesModels.get(index)
+            GlobalScope.launch {
+                repository.untrack(
+                    exchangeRate.baseCurrency,
+                    exchangeRate.counterCurrency
+                )
             }
         }
         fetchAvailableCurrencies()
     }
 
     fun onExchangeRateSelected(index: Int) {
-        val selected = exchangeRatesModels.value?.get(index)
+        val selected = repository.getExchangeRates().value?.get(index)
         if (selected != null) {
             val action = ExchangeRatesFragmentDirections
                 .actionExchangeRatesFragmentToExchangeRateMapFragment()
@@ -73,22 +73,6 @@ class ExchangeRatesViewModel(): ViewModel() {
         GlobalScope.launch {
             availableCurrencies.postValue(repository.getCurrencies())
         }
-    }
-
-    private fun startFetchExchangeRates(repository: ExchangeRatesRepository) {
-        val mainHandler = Handler(Looper.getMainLooper())
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                if (exchangeRates.hasActiveObservers()) {
-                    GlobalScope.launch {
-                        repository.getExchangeRates { it ->
-                            exchangeRatesModels.value = it
-                        }
-                    }
-                }
-                mainHandler.postDelayed(this, fetchDelayMillis)
-            }
-        })
     }
 
     private fun mapExchangeRateToDisplayModel(it: ExchangeRate): ExchangeRateDisplayModel {
