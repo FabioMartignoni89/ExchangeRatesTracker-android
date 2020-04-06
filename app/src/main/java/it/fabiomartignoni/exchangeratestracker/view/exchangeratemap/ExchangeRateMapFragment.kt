@@ -1,5 +1,6 @@
 package it.fabiomartignoni.exchangeratestracker.view.exchangeratemap
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -69,6 +70,7 @@ class ExchangeRateMapFragment: Fragment() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowHomeEnabled(true)
+            actionBar.title = ""
         }
     }
 

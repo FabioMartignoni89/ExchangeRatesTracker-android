@@ -1,5 +1,6 @@
 package it.fabiomartignoni.exchangeratestracker.view.exchangerates
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,14 +53,16 @@ class ExchangeRatesFragment: Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = requireActivity().toolbar
-        toolbar.title = getString(R.string.exchange_rates)
-        val actionBar = (requireActivity() as? AppCompatActivity)?.supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false)
-            actionBar.setDisplayShowHomeEnabled(false)
-        }
+        prepareList()
+        prepareActionBar()
+        setupBindings()
 
+        addExchangeRatesButton.setOnClickListener {
+            openNewExchangeRateDialog()
+        }
+    }
+
+    private fun prepareList() {
         linearLayoutManager = LinearLayoutManager(context)
         exchangeRatesRecyclerview.layoutManager = linearLayoutManager
         exchangeRatesAdapter = ExchangeRatesAdapter(this)
@@ -72,11 +75,16 @@ class ExchangeRatesFragment: Fragment(),
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
         itemTouchHelper.attachToRecyclerView(exchangeRatesRecyclerview)
+    }
 
-        setupBindings()
-
-        addExchangeRatesButton.setOnClickListener {
-            openNewExchangeRateDialog()
+    private fun prepareActionBar() {
+        val toolbar = requireActivity().toolbar
+        toolbar.title = getString(R.string.exchange_rates)
+        val actionBar = (requireActivity() as? AppCompatActivity)?.supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false)
+            actionBar.setDisplayShowHomeEnabled(false)
+            actionBar.title = getString(R.string.exchange_rates)
         }
     }
 

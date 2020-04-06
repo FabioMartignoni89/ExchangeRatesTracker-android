@@ -1,5 +1,6 @@
 package it.fabiomartignoni.exchangeratestracker.view
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
