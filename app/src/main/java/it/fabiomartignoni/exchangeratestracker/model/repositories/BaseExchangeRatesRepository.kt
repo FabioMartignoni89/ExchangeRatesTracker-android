@@ -68,7 +68,7 @@ class BaseExchangeRatesRepository(
         })
     }
 
-    private fun fetchExchangeRates() {
+    private suspend fun fetchExchangeRates() {
         val trackedPairs = persistenceService.loadPairs()
         val apiFormattedPairs = trackedPairs.map { "${it.base}${it.counter}" }
         dataSource.fetchExchangeRates(apiFormattedPairs) { rates ->

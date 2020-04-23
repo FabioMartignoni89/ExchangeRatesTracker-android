@@ -1,17 +1,14 @@
 package it.fabiomartignoni.exchangeratestracker.model.exchangeratesdatasource
 
-import CityDTO
 import CurrenciesDTO
 import com.google.gson.Gson
 import it.fabiomartignoni.exchangeratestracker.model.entities.RefCity
-import it.fabiomartignoni.exchangeratestracker.other.Constants
 import it.fabiomartignoni.exchangeratestracker.other.Endpoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.StringBuilder
 
 class BaseExchangeRatesDataSource(private val jsonLoader: JsonLoaderStrategy,
                                   private val currenciesJsonName: String,
@@ -21,13 +18,13 @@ class BaseExchangeRatesDataSource(private val jsonLoader: JsonLoaderStrategy,
         val TAG = "BaseExchangeRatesDataSource"
     }
 
-    override fun getCurrencies(): List<String> {
+    override suspend fun getCurrencies(): List<String> {
         val currenciesJson = jsonLoader.loadJson(currenciesJsonName)
         val dto = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
         return dto.worldCurrencies.map { it.currency }
     }
 
-    override fun getRefCity(currency: String): RefCity {
+    override suspend fun getRefCity(currency: String): RefCity {
         val currenciesJson = jsonLoader.loadJson(currenciesJsonName)
         val dto = Gson().fromJson(currenciesJson, CurrenciesDTO::class.java)
         val cityDTO = dto
@@ -37,7 +34,7 @@ class BaseExchangeRatesDataSource(private val jsonLoader: JsonLoaderStrategy,
         return RefCity(cityDTO.name, cityDTO.lat, cityDTO.lon)
     }
 
-    override fun fetchExchangeRates(currencyPairs: List<String>, onResult: (List<Double>?) -> Unit) {
+    override suspend fun fetchExchangeRates(currencyPairs: List<String>, onResult: (List<Double>?) -> Unit) {
         // https://europe-west1-revolut-230009.cloudfunctions.net/revolut-ios?pairs=USDJPY&pairs=JPYUSD
         val retrofit = Retrofit.Builder()
             .baseUrl(fetchExchangeRatesEndpoint.baseURL())

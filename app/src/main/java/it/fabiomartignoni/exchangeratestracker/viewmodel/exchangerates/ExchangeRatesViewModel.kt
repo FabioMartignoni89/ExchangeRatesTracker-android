@@ -1,15 +1,12 @@
 package it.fabiomartignoni.exchangeratestracker.viewmodel.exchangerates
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import it.fabiomartignoni.exchangeratestracker.model.entities.ExchangeRate
 import it.fabiomartignoni.exchangeratestracker.model.repositories.ExchangeRatesRepository
 import it.fabiomartignoni.exchangeratestracker.view.exchangerates.ExchangeRatesFragmentDirections
 import it.fabiomartignoni.exchangeratestracker.view.utils.SingleLiveEvent
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -33,7 +30,7 @@ class ExchangeRatesViewModel(): ViewModel() {
     //region UI actions
 
     fun trackCurrencyPair(base: String, counter: String) {
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.track(base, counter)
         }
         fetchAvailableCurrencies()
@@ -44,7 +41,7 @@ class ExchangeRatesViewModel(): ViewModel() {
         if (exchangeRatesModels != null &&
             index < exchangeRatesModels.size) {
             val exchangeRate = exchangeRatesModels.get(index)
-            GlobalScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 repository.untrack(
                     exchangeRate.baseCurrency,
                     exchangeRate.counterCurrency
@@ -70,7 +67,7 @@ class ExchangeRatesViewModel(): ViewModel() {
     //region private
 
     private fun fetchAvailableCurrencies() {
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             availableCurrencies.postValue(repository.getCurrencies())
         }
     }
